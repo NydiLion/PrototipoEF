@@ -90,6 +90,31 @@ USE `bd_polizasC`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `detallePolizaC`()
 BEGIN 
 select * from cuentacontable
-   where Monto_CuentaContable<=1000;
+   where Monto_CuentaContable>=1000;
 END$$
 DELIMITER ;
+
+create table usuario(
+id_usuario varchar(10),
+username varchar (35),
+password_u varchar (45)
+)engine = InnoDB default charset =latin1;
+
+INSERT INTO `umg`. `tbl_usuario`
+VALUES
+('1', 'nayredeleon', '5555');
+
+CREATE TABLE bitacora_usuario(
+id_bitacora int primary key auto_increment,
+usuario varchar (35),  -- usuario de la base de datos
+fecha datetime,
+accion varchar (50)
+)engine = InnoDB default charset =latin1;
+
+registro_eliminado -- borrar
+DELIMITER |
+CREATE TRIGGER registro_eliminado after Insert on `cuentacontable`
+for each row begin
+insert into bitacora_usuario(usuario,fecha,accion) values (current_user(), now (),  'registro eliminado');
+end
+
